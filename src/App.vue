@@ -1,8 +1,8 @@
 <template>
   <nav class="navigation">
-    <router-link to="/">To-do</router-link> |
-    <router-link to="/about">Еще что-то</router-link> |
-    <router-link to="/else">Вторичное</router-link>
+    <router-link to="/">To-do</router-link>
+    <!-- <router-link to="/about">Еще что-то</router-link> |
+    <router-link to="/else">Вторичное</router-link> -->
   </nav>
   <router-view v-slot="{Component}">
     <transition name="fade" mode="out-in">
