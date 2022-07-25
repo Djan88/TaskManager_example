@@ -32,11 +32,10 @@
         'is-invalid': this.task.performs === 'Не выбрано...' && this.invalidData === true
       }" v-model="task.performs">
         <option disabled selected>Не выбрано...</option>
-        <option value="Петр Первый">Петр Первый</option>
-        <option value="Губка Боб">Губка Боб</option>
-        <option value="Анджелина Джоли">Анджелина Джоли</option>
-        <option value="Кхалиси Неопалимая Матерь Драконов Королева Андалов и Первых людей">Кхалиси Неопалимая Матерь
-          Драконов Королева Андалов и Первых людей</option>
+        <option value="Сотрудник 1">Сотрудник 1</option>
+        <option value="Сотрудник 2">Сотрудник 2</option>
+        <option value="Сотрудник 3">Сотрудник 3</option>
+        <option value="Сотрудник 4">Сотрудник 4</option>
       </select>
       <label for="floatingSelect">Назначить ответственного</label>
       <div class="invalid-feedback">
