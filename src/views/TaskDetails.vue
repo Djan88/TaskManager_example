@@ -2,57 +2,41 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-xs-12">
-        <button class="btn btn-small btn-primary" @click="$router.back()">Назад</button>
+        <button class="btn btn-small btn-primary" @click="$router.back(), clearDetail()">Назад</button>
       </div>
       <div class="col-xs-12">
-        {{ this.taskItem.name }}
+        {{ selectedTask.name }}
         <div class="fullTaskInfo">
-          <div class="taskId"><b>ID:</b> {{ this.taskItem.id }}</div>
+          <div class="taskId"><b>ID:</b> {{ selectedTask.id }}</div>
           <div class="taskExp" :class="{
-            'date-cell__deadline': new Date() > new Date(this.taskItem.date),
+            'date-cell__deadline': new Date() > new Date(selectedTask.date),
           }">
-            <b>Выполнить до:</b> {{ this.taskItem.date }}
+            <b>Выполнить до:</b> {{ selectedTask.date }}
           </div>
-          <div class="taskPerformer"><b>Ответственный:</b> {{ this.taskItem.performs }}</div>
+          <div class="taskPerformer"><b>Ответственный:</b> {{ selectedTask.performs }}</div>
           <h6>Описание задачи: </h6>
-          <div class="taskBody">{{ this.taskItem.body }}</div>
+          <div class="taskBody">{{ selectedTask.body }}</div>
           <div class="taskStatus" :class="{
-            'taskStatus__inProgress': this.taskItem.status === 'Выполняется',
-            'taskStatus__done': this.taskItem.status === 'Выполнена',
-          }">{{ this.taskItem.status }}</div>
+            'taskStatus__inProgress': selectedTask.status === 'Выполняется',
+            'taskStatus__done': selectedTask.status === 'Выполнена',
+          }">{{ selectedTask.status }}</div>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
+import { mapGetters, mapMutations } from 'vuex'
 export default {
-  props: {
-    id: {
-      type: Number,
-      required: true
-    }
-  },
-  mounted() {
-    if (window.localStorage.getItem('tasksList')) {
-      this.tasks = JSON.parse(window.localStorage.getItem('tasksList'))
-      this.currentTask()
-    }
-  },
-  data() {
-    return{
-      tasks:[],
-      taskItem: {}
-    }
+  computed: {
+    ...mapGetters(['selectedTask']),
   },
   methods: {
-    currentTask() {
-      this.taskItem = this.tasks.find(task => task.id === this.id)
-    },
+    ...mapMutations(['clearDetailTask']),
+    clearDetail(){
+      this.clearDetailTask()
+    }
   },
-  computed: {
-    
-  }
 }
 </script>
 <style>

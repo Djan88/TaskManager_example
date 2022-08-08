@@ -74,7 +74,7 @@
       </div>
     </div>
     <div v-show="task.id" class="mb-3">
-      <div @click="this.removeTask(task.id)" class="removeTask">Удалить задание</div>
+      <div @click="this.rmTask(task.id)" class="removeTask">Удалить задание</div>
     </div>
     <div class="">
       <button type="submit" class="btn btn-primary" @click.prevent="this.addTask()">Сохранить</button>
@@ -82,6 +82,7 @@
   </form>
 </template>
 <script>
+import { mapGetters, mapMutations } from 'vuex'
 export default {
   props: {
     selectedTask: {
@@ -100,27 +101,33 @@ export default {
         status: 'Выполняется',
         performs: 'Не выбрано...'
       },
+      clearTask : {
+        name: '',
+        body: '',
+        date: '',
+        forced: false,
+        id: null,
+        status: 'Выполняется',
+        performs: 'Не выбрано...'
+      },
       invalidData: false,
       taskModal: {},
       datePopover: {},
     }
-  },
-  emits: {
-    "add-task": value => typeof value === 'object',
-    "remove-task": value => typeof value === 'number'
   },
   mounted(){
     this.setDateForToday()
     this.taskModal = new bootstrap.Modal(document.getElementById('exampleModal'), {
       keyboard: false
     })
-    this.datePopover = new bootstrap.Popover(document.getElementById('deadlineWrap'), {
-      content: 'Этот день уже настал',
-      placement: 'top',
-      trigger: 'manual'
-    })
+    // this.datePopover = new bootstrap.Popover(document.getElementById('deadlineWrap'), {
+    //   content: 'Этот день уже настал',
+    //   placement: 'top',
+    //   trigger: 'manual'
+    // })
   },
   methods: {
+    ...mapMutations(['saveTask', 'removeTask']),
     isDataInvalid(){
       if(!this.task.name || !this.task.body || !this.task.date || this.task.performs === 'Не выбрано...'){
         this.invalidData = true
@@ -135,60 +142,47 @@ export default {
       if(!this.task.id){
         this.task.id = Date.now()
       }
-      this.$emit('add-task', this.task)
-      this.task = {
-        name: '',
-        body: '',
-        date: '',
-        forced: false,
-        id: null,
-        status: 'Выполняется',
-        performs: 'Не выбрано...'
-      }
+      this.saveTask(this.task)
+      this.task = this.clearTask
       this.taskModal.hide()
       this.setDateForToday()
     },
-    removeTask(id){
-      this.$emit('remove-task', id)
-      this.task = {
-        name: '',
-        body: '',
-        date: '',
-        forced: false,
-        id: null,
-        status: 'Выполняется',
-        performs: 'Не выбрано...'
-      }
+    rmTask(id){
+      this.removeTask(id)
       this.invalidData = false
       this.taskModal.hide()
       this.setDateForToday()
+      this.task = this.clearTask
     },
     setDateForToday(){
       let curDate = new Date();
-      curDate.setDate(curDate.getDate() + 1);
+      const curDay = () => {
+        if (curDate.getDate() >= 10) {
+          return curDate.getDate()
+        }
+        return '0' + (curDate.getDate())
+      }
       const curMonth = () => {
         if (curDate.getMonth() >= 10) {
           return curDate.getMonth() + 1
         }
         return '0' + (curDate.getMonth() + 1)
       }
-      this.task.date = `${curDate.getFullYear()}-${curMonth()}-${curDate.getDate()}`
+      this.task.date = `${curDate.getFullYear()}-${curMonth()}-${curDay()}`
     }
   },
   computed: {
-
+    ...mapGetters(['currentTask']),
   },
   watch: {
-    selectedTask(){
-      this.task = this.selectedTask
+    currentTask(){
+      this.task = this.currentTask
     },
-    'task.date'(){
-      if (new Date() > new Date(this.task.date)) {
-        this.datePopover.show()
-      } else {
-        this.datePopover.hide()
-      }
-    }
+    // 'task.date'(){
+    //   if (!this.task.date) {
+    //     this.setDateForToday()
+    //   }
+    // },
   }
 }
 </script>
