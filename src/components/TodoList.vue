@@ -48,7 +48,7 @@ export default {
   },
   methods: {
     ...mapActions(['fetchTasks']),
-    ...mapMutations(['updateSortParam', 'selectTask', 'selectDetailTask']),
+    ...mapMutations(['updateSortParam', 'selectTask', 'selectDetailTask', 'modifiedTasks']),
     formatDate(date){
       const d = new Date(date)
       return `${d.getDate()}.${d.getMonth()+1}.${d.getFullYear()}`
@@ -65,7 +65,8 @@ export default {
   },
   mounted() {
     this.fetchTasks();
-  }
+    // this.fetchFromApi()
+  },
 }
 </script>
 <style>

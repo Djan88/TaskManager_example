@@ -1,18 +1,43 @@
+import axios from 'axios'
 import { createStore } from 'vuex'
 
 export default createStore({
   state: {
     tasks:[],
+    fTasks:[],
+    fTasksMod:[],
     filterParam: 'Все',
     sortParam: 'date',
     curTaskId: null,
     selectedTaskId: null
   },
   actions: {
-    fetchTasks(ctx){
+    fetchTasks({commit}){
       let tasks = JSON.parse(window.localStorage.getItem('tasksList'))
-      ctx.commit('updateTasks', tasks)
-    }
+      commit('updateTasks', tasks)
+    },
+    // fetchFromApi(){
+    //   axios
+    //     .get('https://jsonplaceholder.typicode.com/todos?_limit=20')
+    //     .then(response => {
+    //       this.state.fTasks = response.data
+    //       // console.log(this.state.fTasks);
+    //       this.state.fTasksMod = this.state.fTasks.map(task => {
+    //         const container = {};
+    //         container.id = task.id;
+    //         container.name = task.userId + task.title;
+    //         container.body = task.title;
+    //         container.date = '2022-12-22';
+    //         container.forced = false;
+    //         container.status = task.completed ? 'Выполнена' : 'Выполняется';
+    //         container.performs = 'Сотрудник 1';
+    //         return container
+    //       })
+    //       console.log(this.state.fTasksMod);
+    //       this.state.tasks = [...this.state.tasks, ...this.state.fTasksMod]
+    //     })
+    //     .catch(error => console.log(error));
+    // }
   },
   mutations: {
     updateTasks(state,tasks){
@@ -48,6 +73,20 @@ export default createStore({
     removeTask(state, taskId){
       state.tasks = state.tasks.filter(t => t.id != taskId)
       window.localStorage.setItem('tasksList', JSON.stringify(state.tasks));
+    },
+    modifiedTasks(state){
+      // state.fTasksMod = state.fTasks.map(task => {
+      //   const container = {};
+      //   container.id = task.id;
+      //   container.name = task.userId+task.title;
+      //   container.body = task.title;
+      //   container.date = '2022-12-22';
+      //   container.forced = false;
+      //   container.status = task.completed ? 'Выполнена' : 'Выполняется';
+      //   container.performs = 'Сотрудник 1';
+      //   return container
+      // })
+      // console.log(state.fTasksMod);
     }
   },
   getters: {
